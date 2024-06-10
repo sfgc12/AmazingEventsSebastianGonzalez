@@ -1,0 +1,7 @@
+.logo {
+    max-height: 50px;
+}
+.social-icons {
+    display: flex;
+    gap: 15px; /* Ajusta este valor para cambiar el espacio entre los logos */
+}
