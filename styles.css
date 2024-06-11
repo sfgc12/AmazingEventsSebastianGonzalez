@@ -5,3 +5,10 @@
     display: flex;
     gap: 15px; /* Ajusta este valor para cambiar el espacio entre los logos */
 }
+.am {
+    width: 100%;
+    height: 400px;
+    object-fit: cover;
+}
+.slide{
+    width: 100%;}
