@@ -34,15 +34,23 @@ body {
 }
 
 .footer {
-    background-color: #343a40; /* Cambia el color de fondo del footer */
+    background-color: #343a40; 
 }
 .card-img-top {
+    width: 200px;
+    height: 150px;
     object-fit: cover;
-    max-width: 100%;
-    height: auto;
+  }
+
+  .card {
+    height: 100%;
+    border: none; /* Elimina el borde de las tarjetas si es necesario */
 }
-.custom-card-img {
-    width: 100%; /* Asegura que la imagen ocupe todo el ancho del contenedor */
-    height: 215px; /* Ajusta esta altura según sea necesario */
-    object-fit: cover; /* Asegura que la imagen se recorte para llenar el contenedor */
+
+.card img {
+    height: 300px; /* Ajusta la altura de las imágenes dentro de las tarjetas */
+    object-fit: cover; /* Ajusta la forma en que las imágenes se ajustan a su contenedor */
 }
+  
+  
+  
