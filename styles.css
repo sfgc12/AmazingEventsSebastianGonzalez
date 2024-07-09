@@ -44,13 +44,15 @@ body {
 
   .card {
     height: 100%;
-    border: none; /* Elimina el borde de las tarjetas si es necesario */
+    border: none;
 }
 
 .card img {
-    height: 300px; /* Ajusta la altura de las imágenes dentro de las tarjetas */
-    object-fit: cover; /* Ajusta la forma en que las imágenes se ajustan a su contenedor */
+    height: 300px;
+    object-fit: cover;
 }
+
+
   
   
   

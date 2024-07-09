@@ -195,20 +195,22 @@ const data = {
     ],
   };
 
- function ponerTarjetas(array) {
+  function ponerTarjetas(array) {
     const cardContainer = document.getElementById('cardContainer');
 
     array.forEach(evento => {
         const newCard = document.createElement('div');
-        newCard.className = 'col-md-4 mb-4'; // Ajusta las clases según tus necesidades
+        newCard.className = 'col-md-4';
         newCard.innerHTML = `
             <div class="card h-100">
                 <img src="${evento.image}" class="card-img-top" alt="${evento.name}">
-                <div class="card-body">
+                <div class="card-body d-flex flex-column">
                     <h5 class="card-title">${evento.name}</h5>
                     <p class="card-text">${evento.description}</p>
-                    <h3 class="text-dark mb-0">Price: $${evento.price}</h3>
-                    <a href="./details.html" class="btn btn-primary">Details</a>
+                    <div class="mt-auto d-flex justify-content-between align-items-center">
+                        <span class="text-dark mb-0 price-text">Price: $${evento.price}</span>
+                        <a href="./details.html" class="btn btn-primary">Details</a>
+                    </div>
                 </div>
             </div>
         `;
@@ -218,4 +220,7 @@ const data = {
 
 const events = data.events;
 ponerTarjetas(events);
+
+
+
 
