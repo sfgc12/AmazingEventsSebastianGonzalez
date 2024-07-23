@@ -52,6 +52,57 @@ body {
     object-fit: cover;
 }
 
+.custom-carousel {
+    height: 400px;
+    object-fit: cover;
+}
+
+.custom-carousel .carousel-inner {
+    height: 100%;
+}
+
+.custom-carousel .carousel-item {
+    height: 100%;
+}
+
+.custom-carousel img {
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+}
+
+.custom-carousel .carousel-caption {
+    bottom: 20px;
+}
+
+.custom-carousel .carousel-control-prev,
+.custom-carousel .carousel-control-next {
+    width: 5%;
+}
+
+#mensaje-no-resultados.d-none {
+    display: none;
+  }
+  
+  #mensaje-no-resultados {
+    display: block;
+    padding: 20px;
+    background-color: #FF8225;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+    border-radius: 5px;
+  }
+  
+  .past-events .card {
+    height: 300px; /* Adjust as needed */
+}
+
+.past-events .card-img-top {
+    height: 180px; /* Adjust as needed */
+}
+
+
+
 
   
   

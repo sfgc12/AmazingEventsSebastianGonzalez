@@ -194,33 +194,78 @@ const data = {
       },
     ],
   };
+// Generar checkboxes de categorías dinámicamente
+function generarFiltrosCategorias() {
+  const categoriasUnicas = [...new Set(data.events.map(evento => evento.category))];
+  const contenedorFiltros = document.getElementById("filtros-categorias");
 
-  function ponerTarjetas(array) {
-    const cardContainer = document.getElementById('cardContainer');
-
-    array.forEach(evento => {
-        const newCard = document.createElement('div');
-        newCard.className = 'col-md-4';
-        newCard.innerHTML = `
-            <div class="card h-100">
-                <img src="${evento.image}" class="card-img-top" alt="${evento.name}">
-                <div class="card-body d-flex flex-column">
-                    <h5 class="card-title">${evento.name}</h5>
-                    <p class="card-text">${evento.description}</p>
-                    <div class="mt-auto d-flex justify-content-between align-items-center">
-                        <span class="text-dark mb-0 price-text">Price: $${evento.price}</span>
-                        <a href="./details.html" class="btn btn-primary">Details</a>
-                    </div>
-                </div>
-            </div>
-        `;
-        cardContainer.appendChild(newCard);
-    });
+  categoriasUnicas.forEach(categoria => {
+    const label = document.createElement('label');
+    label.className = "form-check-label";
+    label.innerHTML = `
+      <input type="checkbox" class="form-check-input" value="${categoria}"> ${categoria}
+    `;
+    contenedorFiltros.appendChild(label);
+  });
 }
 
-const events = data.events;
-ponerTarjetas(events);
+function crearTarjetas(eventos) {
+  const contenedor = document.getElementById("tarjetasDinamicas");
+  const mensajeNoResultados = document.getElementById("mensaje-no-resultados");
 
+  contenedor.innerHTML = ''; 
 
+  if (eventos.length > 0) {
+    mensajeNoResultados.classList.add('d-none');
+    eventos.forEach(evento => {
+      const tarjeta = document.createElement('div');
+      tarjeta.className = "col-12 col-md-6 col-lg-3 mb-4";
+      tarjeta.innerHTML = `
+        <div class="card h-100">
+          <img src="${evento.image}" alt="${evento.name}" class="card-img-top">
+          <div class="card-body d-flex flex-column justify-content-end">
+            <h5 class="card-title">${evento.name}</h5>
+            <p class="card-text">${evento.description}</p>
+            <div class="d-flex justify-content-between align-items-center">
+              <p>Price: ${evento.price}</p>
+              <a href="Details.html?id=${evento._id}" class="btn btn-primary">Details</a>
+            </div>
+          </div>
+        </div>`;
+      contenedor.appendChild(tarjeta);
+    });
+  } else {
+    mensajeNoResultados.classList.remove('d-none'); 
+    mensajeNoResultados.innerHTML = `
+      <h3>No hemos podido encontrar eventos</h3>
+      <ul>
+        <li>Revisa la escritura</li>
+        <li>Revisa la fecha</li>
+        <li>Explora nuestras categorías</li>
+      </ul>
+    `;
+  }
+}
 
+function aplicarFiltros() {
+  const searchValue = document.getElementById("search-input").value.toLowerCase();
+  const selectedCategories = Array.from(document.querySelectorAll("#filtros-categorias input:checked"))
+    .map(input => input.value);
 
+  const eventosFiltrados = data.events.filter(evento => {
+    const matchesSearch = evento.name.toLowerCase().includes(searchValue) ||
+                          evento.description.toLowerCase().includes(searchValue);
+    const matchesCategory = selectedCategories.length === 0 || selectedCategories.includes(evento.category);
+    return matchesSearch && matchesCategory;
+  });
+
+  crearTarjetas(eventosFiltrados);
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  generarFiltrosCategorias();
+  crearTarjetas(data.events);
+
+  document.getElementById("search-input").addEventListener("input", aplicarFiltros);
+  document.getElementById("filtros-categorias").addEventListener("change", aplicarFiltros);
+});

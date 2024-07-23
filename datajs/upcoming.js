@@ -195,30 +195,93 @@ const data = {
   ],
 };
 
-function crearTarjeta(i) {
-  let contenedor = document.getElementById("upComingTarjetas")
+document.addEventListener('DOMContentLoaded', function () {
+  function showCards(eventos) {
+      let cardContainer = document.getElementById("upComingTarjetas");
+      cardContainer.innerHTML = '';
 
-  let tarjeta = document.createElement('div')
-  tarjeta.className = "card tarjetaTamaño col-md-4"
+      let currentDate = new Date(data.currentDate);
 
-  tarjeta.innerHTML = `
-  <img src="${data.events[i].image}" class="card-img-top h-50 p-2" alt="...">
-              <div class="card-body text-center d-flex row">
-                  <h5 class="card-title fw-bold"> ${data.events[i].name} </h5>
-                  <p class="card-text">${data.events[i].description}</p>
-                  <div class="d-flex justify-content-between align-self-end">
-                      <p>Price: $${data.events[i].price} </p>
-                      <a href="./details.html" class="btn btn-primary">Details</a>
+      if (eventos.length === 0) {
+          cardContainer.innerHTML = '<p>No se encontraron eventos que coincidan con la búsqueda.</p>';
+          return;
+      }
+
+      for (let evento of eventos) {
+          let eventDate = new Date(evento.date);
+
+          if (eventDate > currentDate) {
+              let nextCard = document.createElement('div');
+              nextCard.className = "card col-md-3 col-sm-6 mb-4";
+
+              nextCard.innerHTML = `
+                  <img src="${evento.image}" class="card-img-top" alt="${evento.name}">
+                  <div class="card-body">
+                      <h5 class="card-title">${evento.name}</h5>
+                      <p class="card-text">${evento.description}</p>
+                      <p class="card-text">Price: $${evento.price}</p>
+                      <a href="./details.html?id=${evento._id}" class="btn btn-primary">Details</a>
                   </div>
-              </div>
-  `
-  contenedor.appendChild(tarjeta)
-}
+              `;
 
+              cardContainer.appendChild(nextCard);
+          }
+      }
 
-for (let j = 0; j <= data.events.length; j++) {
-
-  if (data.currentDate < data.events[j].date) {
-      crearTarjeta(j)
+      if (cardContainer.innerHTML === '') {
+          cardContainer.innerHTML = '<p>No se encontraron eventos que coincidan con la búsqueda.</p>';
+      }
   }
-}
+
+  function filterEvents() {
+      const checkboxes = document.querySelectorAll('.form-check-input:checked');
+      const selectedCategories = Array.from(checkboxes).map(checkbox => checkbox.value.toLowerCase());
+
+      const searchText = document.querySelector('input[type="text"]').value.trim().toLowerCase();
+
+      const filteredEvents = data.events.filter(evento => {
+          const categoryMatch = selectedCategories.length === 0 || selectedCategories.includes(evento.category.toLowerCase());
+          const textMatch = evento.name.toLowerCase().includes(searchText) || evento.description.toLowerCase().includes(searchText);
+
+          return categoryMatch && textMatch;
+      });
+
+      showCards(filteredEvents);
+  }
+
+  function debounce(func, wait) {
+      let timeout;
+      return function () {
+          clearTimeout(timeout);
+          timeout = setTimeout(() => func.apply(this, arguments), wait);
+      };
+  }
+
+  const categories = Array.from(new Set(data.events.map(event => event.category)));
+
+  const checkboxContainer = document.querySelector('.category-filter');
+  let checkboxesHTML = '';
+
+  categories.forEach(category => {
+      const id = category.toLowerCase().replace(' ', '-') + '-checkbox';
+      const value = category.toLowerCase();
+
+      checkboxesHTML += `
+          <div class="me-3">
+              <input class="form-check-input" type="checkbox" id="${id}" value="${value}">
+              <label for="${id}">${category}</label>
+          </div>
+      `;
+  });
+
+  checkboxContainer.innerHTML = checkboxesHTML;
+
+  document.querySelectorAll('.form-check-input').forEach(input => {
+      input.addEventListener('change', filterEvents);
+  });
+
+  document.querySelector('input[type="text"]').addEventListener('input', debounce(filterEvents, 300));
+
+  // Initial filter to show only upcoming events
+  filterEvents();
+});
